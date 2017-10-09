@@ -16,10 +16,11 @@
 
 package org.immutables.vavr.encodings;
 
+import org.immutables.encode.Encoding;
+
 import io.vavr.collection.HashSet;
 import io.vavr.collection.LinkedHashSet;
 import io.vavr.collection.Set;
-import org.immutables.encode.Encoding;
 
 @Encoding
 class VavrSetEncoding<T>
@@ -31,6 +32,30 @@ class VavrSetEncoding<T>
   VavrSetEncoding()
   {
 
+  }
+
+  @SafeVarargs
+  @Encoding.Copy
+  @Encoding.Naming(standard = Encoding.StandardNaming.WITH)
+  public final Set<T> withVarArgs(final T... elements)
+  {
+    return LinkedHashSet.of(elements);
+  }
+
+  @Encoding.Copy
+  @Encoding.Naming(standard = Encoding.StandardNaming.WITH)
+  public final Set<T> withIterable(final Iterable<? extends T> elements)
+  {
+    return LinkedHashSet.ofAll(elements);
+  }
+
+  // NOTE: when we specify a copy method, the default one is not longer generated,
+  // thus we must explicitly add it
+  @Encoding.Copy
+  @Encoding.Naming(standard = Encoding.StandardNaming.WITH)
+  public final Set<T> with(final Set<T> value)
+  {
+    return value;
   }
 
   @Encoding.Builder

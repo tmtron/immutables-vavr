@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import io.vavr.collection.HashSet;
+import io.vavr.collection.Set;
 
 public final class ExampleSetTest
 {
@@ -105,4 +106,86 @@ public final class ExampleSetTest
     Assert.assertTrue(a0.integers().contains(Integer.valueOf(11)));
     Assert.assertTrue(a0.integers().contains(Integer.valueOf(12)));
   }
+
+  public void testWithSingleItem()
+  {
+    final ImmutableExampleSetType.Builder b =
+            ImmutableExampleSetType.builder();
+
+    b.addIntegers(Integer.valueOf(0));
+    b.addIntegers(Integer.valueOf(1));
+    b.addIntegers(Integer.valueOf(2));
+
+    final ImmutableExampleSetType a0 = b.build();
+
+    final ImmutableExampleSetType a1 = a0.withIntegers(Integer.valueOf(3));
+    Assert.assertEquals(1L, (long) a1.integers().size());
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(1)));
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(2)));
+    Assert.assertTrue(a1.integers().contains(Integer.valueOf(3)));
+  }
+
+  public void testWithVarArgs()
+  {
+    final ImmutableExampleSetType.Builder b =
+            ImmutableExampleSetType.builder();
+
+    b.addIntegers(Integer.valueOf(0));
+    b.addIntegers(Integer.valueOf(1));
+    b.addIntegers(Integer.valueOf(2));
+
+    final ImmutableExampleSetType a0 = b.build();
+
+    final ImmutableExampleSetType a1 = a0.withIntegers(Integer.valueOf(3), Integer.valueOf(4));
+    Assert.assertEquals(2L, (long) a1.integers().size());
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(1)));
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(2)));
+    Assert.assertTrue(a1.integers().contains(Integer.valueOf(3)));
+    Assert.assertTrue(a1.integers().contains(Integer.valueOf(4)));
+  }
+
+  public void testWithIterable()
+  {
+    final ImmutableExampleSetType.Builder b =
+            ImmutableExampleSetType.builder();
+
+    b.addIntegers(Integer.valueOf(0));
+    b.addIntegers(Integer.valueOf(1));
+    b.addIntegers(Integer.valueOf(2));
+
+    final ImmutableExampleSetType a0 = b.build();
+
+    final Integer[] intArr = new Integer[2];
+    intArr[0] = Integer.valueOf(3);
+    intArr[1] = Integer.valueOf(4);
+
+    final ImmutableExampleSetType a1 = a0.withIntegers(intArr);
+    Assert.assertEquals(2L, (long) a1.integers().size());
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(1)));
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(2)));
+    Assert.assertTrue(a1.integers().contains(Integer.valueOf(3)));
+    Assert.assertTrue(a1.integers().contains(Integer.valueOf(4)));
+  }
+
+  public void testWithOtherSet()
+  {
+    final ImmutableExampleSetType.Builder b =
+            ImmutableExampleSetType.builder();
+
+    b.addIntegers(Integer.valueOf(0));
+    b.addIntegers(Integer.valueOf(1));
+    b.addIntegers(Integer.valueOf(2));
+
+    final ImmutableExampleSetType a0 = b.build();
+
+    final Set<Integer> c = HashSet.of(Integer.valueOf(3), Integer.valueOf(4));
+
+    final ImmutableExampleSetType a1 = a0.withIntegers(c);
+    Assert.assertEquals(2L, (long) a1.integers().size());
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(1)));
+    Assert.assertFalse(a1.integers().contains(Integer.valueOf(2)));
+    Assert.assertTrue(a1.integers().contains(Integer.valueOf(3)));
+    Assert.assertTrue(a1.integers().contains(Integer.valueOf(4)));
+  }
+
 }
