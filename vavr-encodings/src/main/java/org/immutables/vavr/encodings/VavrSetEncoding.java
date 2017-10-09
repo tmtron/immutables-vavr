@@ -68,12 +68,13 @@ class VavrSetEncoding<T>
 
     }
 
+    @SafeVarargs
     @Encoding.Naming(standard = Encoding.StandardNaming.ADD)
     @Encoding.Init
-    void add(
-      final T element)
+    final void add(
+      final T... elements)
     {
-      this.set = this.set.add(element);
+      this.set = this.set.addAll(HashSet.of(elements));
     }
 
     @Encoding.Naming(standard = Encoding.StandardNaming.ADD_ALL)
